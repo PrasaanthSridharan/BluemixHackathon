@@ -19,4 +19,5 @@
 
 ### Next step: Database installation and configuration
 Database information: https://docs.djangoproject.com/en/1.8/topics/install/#database-installation
-Base database setup: https://docs.djangoproject.com/en/1.8/intro/tutorial01/ 
+
+Basic database setup: https://docs.djangoproject.com/en/1.8/intro/tutorial01/ 
