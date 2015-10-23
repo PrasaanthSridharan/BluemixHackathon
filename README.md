@@ -13,7 +13,7 @@ print(django.get_version())
 * Go to the ``appsite`` directory under the project directory and start up the barebone Django server
 ```bash
 cd /vagrant/appsite/
-python manage.py runserver
+python manage.py runserver 0.0.0.0:8000
 ```
   Now you can access the barebone web server at ``http://127.0.0.1:8081/`` outside of the virtual machine.
 
