@@ -3,25 +3,35 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from models import CrisisUser
-from forms import RegisterForm
+from forms import CrisisUserForm, UserForm
+from django.forms.models import model_to_dict
 
 def index(request):
 	# Process the form data
 	if request.method == "POST":
-		form = RegisterForm(request.POST)
-		if form.is_valid():
-			form_data = form.cleaned_data
-			new_user = User.objects.create_user(form_data['username'], form_data['email'], form_data['password'])
+		crisisUserForm = CrisisUserForm(request.POST)
+		userForm = UserForm(request.POST)
+		assert crisisUserForm.is_valid()
+		assert userForm.is_valid()
+		if crisisUserForm.is_valid() and userForm.is_valid():
+			crisisUserForm_data = crisisUserForm.cleaned_data
+			userForm_data = userForm.cleaned_data
+			new_user = User.objects.create_user(**userForm_data)
 			new_user.save()
-			crisis_user = CrisisUser(user=new_user, cellphone=form_data['cellphone'], address=form_data['address'])
+			crisis_user = CrisisUser.objects.create(user=new_user, **crisisUserForm_data)
 			crisis_user.save()
-			return HttpResponseRedirect(reverse('bluehack:register', args=(form_data['username'],)))
-	
+			return HttpResponseRedirect(reverse('bluehack:register', args=(userForm_data['username'],)))
+
 		return render(request, 'bluehack/index.html', {'error': 'Failed to register'})
 	# Create a blank form if any other method
 	else:
-		form = RegisterForm()
-	return render(request, 'bluehack/index.html', {'error': '', 'form': form})
+		crisisUserForm = CrisisUserForm()
+		userForm = UserForm()
+	return render(request, 'bluehack/index.html', {
+		'error': '',
+		'crisisUserForm': crisisUserForm,
+		'userForm': userForm
+		})
 
 def register(request, username):
 	user = User.objects.get(username=username)
@@ -30,10 +40,7 @@ def register(request, username):
 	cellphone = user.crisisuser.cellphone
 	address = user.crisisuser.address
 	context = {
-				'username': username,
-				'password': password,
-				'email': email,
-				'cellphone': cellphone,
-				'address': address
+				'userProps': model_to_dict(user, fields=['username', 'password', 'email']),
+				'crisisUserProps': model_to_dict(user.crisisuser)
 			  }
 	return render(request, 'bluehack/register.html', context)

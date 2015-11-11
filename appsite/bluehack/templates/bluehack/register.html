@@ -6,12 +6,18 @@
 	</head>
 	<body>
 		<div>
-			<h1><span class="label label-info">{{ username }}</span> registered successfully with the following information</h1>
-			<ul>
-				<li>Password(Hashed): {{ password }}</li>
-				<li>Email: {{ email }}</li>
-				<li>Cellphone: {{ cellphone }}</li>
-				<li>Address: {{ address }}</li>
-			</ul>
+			<h1><span class="label label-info">{{ userProps.username }}</span> registered successfully with the following information</h1>
+			<table class="table"><tbody>
+        {% for key,value in userProps.items %}
+        <tr>
+          <td>{{ key }}</td><td>{{ value }}</td>
+        <tr>
+        {% endfor %}
+        {% for key,value in crisisUserProps.items %}
+        <tr>
+          <td>{{ key }}</td><td>{{ value }}</td>
+        <tr>
+        {% endfor %}
+			</tbody></table>
 		</div>
 </html>

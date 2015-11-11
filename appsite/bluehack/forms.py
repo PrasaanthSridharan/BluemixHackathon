@@ -1,8 +1,25 @@
+from django.db import models
 from django import forms
+from django.forms import ModelForm
+from django.contrib.auth.models import User   # fill in custom user info then save it
+from bluehack.models import CrisisUser
+from django.contrib.auth.forms import UserCreationForm
 
-class RegisterForm(forms.Form):
-	username = forms.CharField(label='Username', max_length=20)
-	password = forms.CharField(label='Password', max_length=20)
-	email = forms.EmailField(label='Email', max_length=100)
-	cellphone = forms.CharField(label='Cellphone', max_length=10, required=False)
-	address = forms.CharField(label='address', max_length=100)
+class CrisisUserForm(ModelForm):
+	class Meta:
+		model = CrisisUser
+		exclude = ['user']
+
+	# def save(self, commit = True):
+	# 	user = super(MyRegistrationForm, self).save(commit = False)
+	# 	user.email = self.cleaned_data['email']
+	#
+	# 	if commit:
+	# 		user.save()
+	#
+	# 	return user
+
+class UserForm(ModelForm):
+	class Meta:
+		model = User
+		fields = ('username', 'email', 'password')

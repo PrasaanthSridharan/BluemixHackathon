@@ -13,8 +13,9 @@
 			<form action="{% url 'bluehack:index' %}" method="post">
 			{% csrf_token %}
 				<h1><span class="label label-default">Account Creation</span></h1>
-				{{ form }}
-                <input type="submit" class="btn btn-lg btn-primary" value="Register">
+        {{ userForm }}
+        {{ crisisUserForm }}
+				<input type="submit" class="btn btn-lg btn-primary" value="Register">
 			</form>
 		</div>
 		{% endif %}
